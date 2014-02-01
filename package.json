@@ -1,0 +1,10 @@
+{
+  "name": "ensure",
+  "version": "1.0.0",
+  "private": false,
+  "engines": {
+    "node": "*",
+    "npm": "*"
+  },
+  "dependencies": {},
+}
