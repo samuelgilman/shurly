@@ -4,30 +4,27 @@ Shurly is a simple, dependency free, Node.js module for ensuring indexes in Mong
 
 ### Install
 
-<pre>
-npm install shurly 
-</pre>
+    npm install shurly 
 
 ### Use
 
-<pre>
-var shurly = require('shurly');
+    var shurly = require('shurly');
+    
+    var mongo // your mongo connection
+    
+    var collections = [{  
+      name: 'posts',
+      fields:  ['_userId']
+    }];
+    
+    var log = function (mes) {
+      console.log(mes);
+    };
 
-shurly.ensure({
-
-  mongo: mongo, 
-  collections: [{
-    name: 'webpages',
-    fields:  ['url', 'ok']
-  }]
-
-}, function (err, ensured) {
-
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(ensured); 
-  }
-
-});
-</pre>
+    shurly.ensure({
+      mongo: mongo, 
+      collections: collections,
+      log: log
+    }, function (err) {
+      if (err) { console.log(err); }
+    });
