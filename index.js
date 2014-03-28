@@ -5,15 +5,16 @@ module.exports = {
     var that = this;
     var mongo = params.mongo;
     var collections = params.collections;
+    var log = (params.log || function (mes) {});
 
     that.mongo = mongo;
+    that.log = log;
 
     that.ensureCollection({
       index: 0,
-      collections: collections,
-      results: [] 
-    }, function (err, results) {
-      next(err, results);
+      collections: collections
+    }, function (err) {
+      next(err);
     });
 
   },
@@ -35,21 +36,17 @@ module.exports = {
 
         index: 0,
         name: name,
-        fields: fields,
-        results: results 
+        fields: fields
 
-      }, function (err, results) {
+      }, function (err) {
       
         if (err) {
-
           next(err);
-
         } else {
 
           that.ensureCollection({
             index: (index + 1),
-            collections: collections,
-            results: results
+            collections: collections
           }, next);
       
         }
@@ -57,9 +54,7 @@ module.exports = {
       });
 
     } else {
-
-      next(null, results);
-  
+      next();
     }
 
   },
@@ -67,7 +62,7 @@ module.exports = {
   ensureCollectionField: function(params, next) {
 
     var that = this
-    var results = params.results;
+    var log = that.log;
     var mongo = that.mongo;
     var name = params.name;
     var index = params.index;
@@ -79,18 +74,15 @@ module.exports = {
       mongo.collection(name).ensureIndex(field, function(err) {
 
         if (err) {
-
           next(err);
-
         } else {
 
-          results.push('ensured ' + name + '.' + field);
+          log('ensured ' + name + '.' + field);
 
           that.ensureCollectionField({
             index: (index + 1),
             name: name,
-            fields: fields,
-            results: results 
+            fields: fields
           }, next);
 
         }
@@ -98,9 +90,7 @@ module.exports = {
       });
 
     } else {
-
-      next(null, results);
-  
+      next();
     }
 
   }
